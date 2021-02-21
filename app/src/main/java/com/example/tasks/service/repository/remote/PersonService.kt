@@ -9,6 +9,17 @@ import retrofit2.http.POST
 interface PersonService {
     @POST("Authentication/Login")
     @FormUrlEncoded()
-    fun login( @Field ("email") email: String,
-               @Field ("password") password: String) : Call<HeaderModel>
+    fun login(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Call<HeaderModel>
+
+    @POST("Authentication/Create")
+    @FormUrlEncoded()
+    fun createUser(
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("receivenews") news: Boolean
+    ):Call<HeaderModel>
 }

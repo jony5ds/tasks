@@ -5,10 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
-import com.example.tasks.service.listener.LoginListener
+import com.example.tasks.service.listener.RequestListener
 import com.example.tasks.service.repository.PersonRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
-import com.example.tasks.widget.ValidationLoginResponse
+import com.example.tasks.widget.ValidationResponse
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -18,21 +18,21 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository = PersonRepository(application)
     private val mPreferences = SecurityPreferences(application)
 
-    private val mLogin = MutableLiveData<ValidationLoginResponse>()
+    private val mLogin = MutableLiveData<ValidationResponse>()
     val login = mLogin
 
     private val mLoggedUser = MutableLiveData<Boolean>()
     val loggedUser = mLoggedUser
 
     fun doLogin(email: String, password: String) {
-        mRepository.login(email, password, object : LoginListener {
+        mRepository.login(email, password, object : RequestListener {
             override fun onSuccess(model: HeaderModel) {
                 storeUser(model)
-                mLogin.value = ValidationLoginResponse()
+                mLogin.value = ValidationResponse()
             }
 
             override fun onFailure(message: String) {
-                mLogin.value = ValidationLoginResponse(message,false)
+                mLogin.value = ValidationResponse(message,false)
             }
         })
     }
