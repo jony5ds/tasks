@@ -27,9 +27,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun doLogin(email: String, password: String) {
         mRepository.login(email, password, object : LoginListener {
             override fun onSuccess(model: HeaderModel) {
-                mPreferences.store(TaskConstants.SHARED.PERSON_KEY, model.personKey)
-                mPreferences.store(TaskConstants.SHARED.TOKEN_KEY,model.token)
-                mPreferences.store(TaskConstants.SHARED.PERSON_NAME,model.name)
+                storeUser(model)
                 mLogin.value = ValidationLoginResponse()
             }
 
@@ -39,14 +37,25 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    private fun storeUser(model: HeaderModel) {
+        mPreferences.store(TaskConstants.SHARED.PERSON_KEY, model.personKey)
+        mPreferences.store(TaskConstants.SHARED.TOKEN_KEY, model.token)
+        mPreferences.store(TaskConstants.SHARED.PERSON_NAME, model.name)
+    }
+
     /**
      * Verifica se usuário está logado
      */
     fun verifyLoggedUser() {
-        val personKey = mPreferences.get(TaskConstants.SHARED.PERSON_KEY)
-        val tokenKey = mPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
+        val (personKey, tokenKey) = getUserStorage()
         val logged = (personKey != "" && tokenKey != "")
         mLoggedUser.value = logged
+    }
+
+    private fun getUserStorage(): Pair<String, String> {
+        val personKey = mPreferences.get(TaskConstants.SHARED.PERSON_KEY)
+        val tokenKey = mPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
+        return Pair(personKey, tokenKey)
     }
 
 }
