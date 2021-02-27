@@ -3,10 +3,10 @@ package com.example.tasks.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.tasks.service.HeaderModel
+import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.RequestListener
-import com.example.tasks.service.repository.PersonRepository
+import com.example.tasks.service.repository.AuthenticationRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
 import com.example.tasks.widget.ValidationResponse
 
@@ -15,7 +15,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Faz login usando API
      */
-    private val mRepository = PersonRepository(application)
+    private val mRepository = AuthenticationRepository(application)
     private val mPreferences = SecurityPreferences(application)
 
     private val mLogin = MutableLiveData<ValidationResponse>()

@@ -1,4 +1,4 @@
-package com.example.tasks.service.repository.remote
+package com.example.tasks.service.repository.cliente
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

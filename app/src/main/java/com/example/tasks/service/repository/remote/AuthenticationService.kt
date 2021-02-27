@@ -1,12 +1,13 @@
 package com.example.tasks.service.repository.remote
 
-import com.example.tasks.service.HeaderModel
+import com.example.tasks.service.model.HeaderModel
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface PersonService {
+interface AuthenticationService {
+
     @POST("Authentication/Login")
     @FormUrlEncoded()
     fun login(
@@ -21,5 +22,5 @@ interface PersonService {
         @Field("email") email: String,
         @Field("password") password: String,
         @Field("receivenews") news: Boolean
-    ):Call<HeaderModel>
+    ): Call<HeaderModel>
 }
