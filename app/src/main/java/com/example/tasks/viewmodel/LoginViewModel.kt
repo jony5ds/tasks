@@ -7,6 +7,7 @@ import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.RequestListener
 import com.example.tasks.service.repository.AuthenticationRepository
+import com.example.tasks.service.repository.PriorityRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
 import com.example.tasks.widget.ValidationResponse
 
@@ -15,7 +16,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Faz login usando API
      */
-    private val mRepository = AuthenticationRepository(application)
+    private val mAuthenticationRepository = AuthenticationRepository(application)
+    private val mPriorityRepository = PriorityRepository(application)
     private val mPreferences = SecurityPreferences(application)
 
     private val mLogin = MutableLiveData<ValidationResponse>()
@@ -25,7 +27,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val loggedUser = mLoggedUser
 
     fun doLogin(email: String, password: String) {
-        mRepository.login(email, password, object : RequestListener {
+        mAuthenticationRepository.login(email, password, object : RequestListener {
             override fun onSuccess(model: HeaderModel) {
                 storeUser(model)
                 mLogin.value = ValidationResponse()
@@ -49,6 +51,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyLoggedUser() {
         val (personKey, tokenKey) = getUserStorage()
         val logged = (personKey != "" && tokenKey != "")
+
+        if (!logged)
+            mPriorityRepository.getPriority()
+
         mLoggedUser.value = logged
     }
 
