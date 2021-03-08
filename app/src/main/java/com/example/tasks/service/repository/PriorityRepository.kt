@@ -32,4 +32,6 @@ class PriorityRepository(context: Context) {
             }
         })
     }
+
+    fun getLocalList() = mDataBase.getList()
 }
