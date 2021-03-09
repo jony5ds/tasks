@@ -8,6 +8,7 @@ import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.RequestListener
 import com.example.tasks.service.repository.AuthenticationRepository
 import com.example.tasks.service.repository.PriorityRepository
+import com.example.tasks.service.repository.cliente.RetrofitClient
 import com.example.tasks.service.repository.local.SecurityPreferences
 import com.example.tasks.widget.ValidationResponse
 
@@ -40,9 +41,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun storeUser(model: HeaderModel) {
-        mPreferences.store(TaskConstants.SHARED.PERSON_KEY, model.personKey)
-        mPreferences.store(TaskConstants.SHARED.TOKEN_KEY, model.token)
-        mPreferences.store(TaskConstants.SHARED.PERSON_NAME, model.name)
+        with(model) {
+            mPreferences.store(TaskConstants.SHARED.PERSON_KEY, personKey)
+            mPreferences.store(TaskConstants.SHARED.TOKEN_KEY, token)
+            mPreferences.store(TaskConstants.SHARED.PERSON_NAME, name)
+            RetrofitClient.addHeader(personKey,token)
+        }
     }
 
     /**
@@ -51,6 +55,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyLoggedUser() {
         val (personKey, tokenKey) = getUserStorage()
         val logged = (personKey != "" && tokenKey != "")
+        RetrofitClient.addHeader(personKey,tokenKey)
 
         if (!logged)
             mPriorityRepository.getPriority()
