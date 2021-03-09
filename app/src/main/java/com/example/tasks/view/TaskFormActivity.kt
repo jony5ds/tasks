@@ -47,12 +47,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private fun handleSave() {
         val task = TaskModel().apply {
             this.description = edit_description.text.toString()
-            this.priorityId  = mLisPriorityId[spinner_priority.selectedItemPosition]
-            this.complete    = check_complete.isChecked
-            this.dueDate     = button_date.text.toString()
-            this.id          = 0
+            this.priorityId = mLisPriorityId[spinner_priority.selectedItemPosition]
+            this.complete = check_complete.isChecked
+            this.dueDate = button_date.text.toString()
+            this.id = 0
         }
-
         mViewModel.saveTask(task)
     }
 
@@ -87,5 +86,4 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         val chosedDay = mDateFormat.format(calendar.time)
         button_date.text = chosedDay
     }
-
 }
