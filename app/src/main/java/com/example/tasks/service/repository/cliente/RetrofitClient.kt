@@ -1,6 +1,9 @@
 package com.example.tasks.service.repository.cliente
 
+import com.example.tasks.service.constants.TaskConstants
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -13,18 +16,17 @@ class RetrofitClient private constructor() {
         private var mTokenKey = ""
 
         private fun getRetrofitInstance(): Retrofit {
-           /* httpClient.addInterceptor(object : Interceptor {
+            httpClient.addInterceptor(object : Interceptor {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     val request = chain.request()
                         .newBuilder()
-                        .addHeader(TaskConstants.HEADER.PERSON_KEY, personKey)
-                        .addHeader(TaskConstants.HEADER.TOKEN_KEY, tokenKey)
+                        .addHeader(TaskConstants.HEADER.PERSON_KEY, mPersonKey)
+                        .addHeader(TaskConstants.HEADER.TOKEN_KEY, mTokenKey)
                         .build()
                     return chain.proceed(request)
-
                 }
 
-            })*/
+            })
             if (!Companion::retrofit.isInitialized) {
                 retrofit = Retrofit.Builder()
                     .baseUrl(URL)

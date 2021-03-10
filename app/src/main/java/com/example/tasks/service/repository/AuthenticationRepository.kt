@@ -15,7 +15,7 @@ import retrofit2.Response
 class AuthenticationRepository(val context: Context) {
     private val mRemote = RetrofitClient.createService(AuthenticationService::class.java)
 
-    fun login(email: String, password: String, listener: RequestListener) {
+    fun login(email: String, password: String, listener: RequestListener<HeaderModel>) {
         val call = mRemote.login(email, password)
         call.enqueue(object : Callback<HeaderModel> {
             override fun onFailure(call: Call<HeaderModel>, t: Throwable) {
@@ -35,7 +35,7 @@ class AuthenticationRepository(val context: Context) {
         })
     }
 
-    fun createUser(name: String, email: String, password: String, listener: RequestListener) {
+    fun createUser(name: String, email: String, password: String, listener: RequestListener<HeaderModel>) {
         val call = mRemote.createUser(
             name = name,
             email = email,
@@ -50,8 +50,9 @@ class AuthenticationRepository(val context: Context) {
             override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
                 if (response.code() != TaskConstants.HTTP.SUCCESS) {
                     val validation = Gson().fromJson(
-                        response.errorBody()!!.string(), String::class.java
-                    )
+                            response.errorBody()!!.string(),
+                            String::class.java
+                        )
                     listener.onFailure(validation)
                 } else
                     response.body()?.let { listener.onSuccess(it) }

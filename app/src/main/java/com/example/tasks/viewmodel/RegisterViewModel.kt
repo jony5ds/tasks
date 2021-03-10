@@ -23,7 +23,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             name = name,
             email = email,
             password = password,
-            listener = object : RequestListener {
+            listener = object : RequestListener<HeaderModel> {
                 override fun onSuccess(model: HeaderModel) {
                     mPreferences.store(TaskConstants.SHARED.PERSON_KEY, model.personKey)
                     mPreferences.store(TaskConstants.SHARED.TOKEN_KEY, model.token)

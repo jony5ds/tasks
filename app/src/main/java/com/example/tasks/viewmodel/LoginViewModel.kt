@@ -28,7 +28,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val loggedUser = mLoggedUser
 
     fun doLogin(email: String, password: String) {
-        mAuthenticationRepository.login(email, password, object : RequestListener {
+        mAuthenticationRepository.login(email, password, object : RequestListener<HeaderModel> {
             override fun onSuccess(model: HeaderModel) {
                 storeUser(model)
                 mLogin.value = ValidationResponse()

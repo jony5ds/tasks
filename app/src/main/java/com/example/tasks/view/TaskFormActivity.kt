@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.model.TaskModel
 import com.example.tasks.viewmodel.TaskFormViewModel
 import kotlinx.android.synthetic.main.activity_register.button_save
@@ -72,6 +74,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             }
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
             spinner_priority.adapter = adapter
+        })
+        mViewModel.getResponseOfCreate.observe(this, androidx.lifecycle.Observer {
+            if (it.validator.not()) {
+                Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this,"Tarefa criada com sucesso",Toast.LENGTH_SHORT).show()
+            }
         })
     }
 
