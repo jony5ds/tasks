@@ -40,4 +40,34 @@ class TaskRepository(val context: Context) {
             }
         })
     }
+
+    fun getAllTasks(listener: RequestListener<List<TaskModel>>) {
+        val call = mRemote.getAllTasks()
+        getList(call,listener)
+    }
+
+    private fun getList(call: Call<List<TaskModel>>, listener: RequestListener<List<TaskModel>>) {
+        call.enqueue(object : Callback<List<TaskModel>> {
+            override fun onFailure(call: Call<List<TaskModel>>, t: Throwable) {
+                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(
+                call: Call<List<TaskModel>>,
+                response: Response<List<TaskModel>>
+            ) {
+                if(response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validation = Gson().fromJson(
+                        response.errorBody()!!.string(), String()::class.java
+                    )
+                    listener.onFailure(validation)
+                } else
+                    response.body()?.let {
+                        listener.onSuccess(it)
+                    }
+            }
+        })
+    }
+
+
 }

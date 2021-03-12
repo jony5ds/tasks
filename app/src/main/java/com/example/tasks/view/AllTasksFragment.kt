@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
@@ -62,8 +60,14 @@ class AllTasksFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mAdapter.attachListener(mListener)
+        mViewModel.getAllTasks()
     }
 
-    private fun observe() {}
+    private fun observe() {
+        mViewModel.tasks.observe(viewLifecycleOwner, Observer {
+            if (it.count() > 0)
+                mAdapter.updateList(it)
+        })
+    }
 
 }
