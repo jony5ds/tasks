@@ -46,6 +46,16 @@ class TaskRepository(val context: Context) {
         getList(call,listener)
     }
 
+    fun getOverdue(listener: RequestListener<List<TaskModel>>) {
+        val call = mRemote.getOverdueTasks()
+        getList(call,listener)
+    }
+
+    fun getNextSevenDays(listener: RequestListener<List<TaskModel>>) {
+        val call = mRemote.getNextSevenDays()
+        getList(call,listener)
+    }
+
     private fun getList(call: Call<List<TaskModel>>, listener: RequestListener<List<TaskModel>>) {
         call.enqueue(object : Callback<List<TaskModel>> {
             override fun onFailure(call: Call<List<TaskModel>>, t: Throwable) {
