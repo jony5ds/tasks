@@ -14,18 +14,44 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val mList = MutableLiveData<List<TaskModel>>()
     val tasks = mList
 
-    fun getAllTasks() {
-       mTaskRepository.getAllTasks(object : RequestListener<List<TaskModel>> {
-           override fun onSuccess(model: List<TaskModel>) {
-            mList.value = model
-           }
+    fun listAllTasks() {
+        mTaskRepository.getAllTasks(object : RequestListener<List<TaskModel>> {
+            override fun onSuccess(model: List<TaskModel>) {
+                mList.value = model
+            }
 
-           override fun onFailure(message: String) {
-            mList.value = arrayListOf()
-           }
+            override fun onFailure(message: String) {
+                mList.value = arrayListOf()
+            }
 
-       })
+        })
     }
 
+    fun completeTask(id: Int) {
+        updateTask(id, true)
+    }
 
+    fun undoTask(id: Int) {
+        updateTask(id, false)
+    }
+
+    private fun updateTask(id: Int, complete: Boolean) {
+        mTaskRepository.updateStatus(id, complete, object : RequestListener<Boolean> {
+            override fun onSuccess(model: Boolean) {
+                listAllTasks()
+            }
+
+            override fun onFailure(message: String) {}
+        })
+    }
+
+    fun deleteTask(id: Int) {
+        mTaskRepository.deleteTask(id, object : RequestListener<Boolean> {
+            override fun onSuccess(model: Boolean) {
+                listAllTasks()
+            }
+
+            override fun onFailure(message: String) {}
+        })
+    }
 }

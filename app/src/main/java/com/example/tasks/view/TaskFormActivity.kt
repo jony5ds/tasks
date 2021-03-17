@@ -88,9 +88,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         })
         mViewModel.getResponseOfCreate.observe(this, androidx.lifecycle.Observer {
             if (it.validator.not()) {
-                Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"Tarefa criada com sucesso",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tarefa criada com sucesso", Toast.LENGTH_SHORT).show()
             }
         })
         mViewModel.task.observe(this, androidx.lifecycle.Observer {
