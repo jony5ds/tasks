@@ -23,6 +23,8 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var mViewModel: TaskFormViewModel
     private val mDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
     private val mLisPriorityId: MutableList<Int> = arrayListOf()
+    private var mTaskId: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,16 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         // Inicializa eventos
         listeners()
         observe()
+        loadDataFromActivity()
         mViewModel.listPriorities()
+    }
+
+    private fun loadDataFromActivity() {
+        val bundle = intent.extras
+        if (bundle != null) {
+            mTaskId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            mViewModel.loadTask(mTaskId)
+        }
     }
 
     override fun onClick(v: View) {
@@ -52,7 +63,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             this.priorityId = mLisPriorityId[spinner_priority.selectedItemPosition]
             this.complete = check_complete.isChecked
             this.dueDate = button_date.text.toString()
-            this.id = 0
+            this.id = mTaskId
         }
         mViewModel.saveTask(task)
     }
@@ -82,6 +93,23 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
                 Toast.makeText(this,"Tarefa criada com sucesso",Toast.LENGTH_SHORT).show()
             }
         })
+        mViewModel.task.observe(this, androidx.lifecycle.Observer {
+            edit_description.setText(it.description)
+            check_complete.isChecked = it.complete
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.dueDate)
+            button_date.text = mDateFormat.format(date!!)
+            spinner_priority.setSelection(getSpinnerIndex(it.priorityId))
+        })
+    }
+
+    private fun getSpinnerIndex(priorityId: Int): Int {
+        var index = 0
+        for (i in 0 until mLisPriorityId.size) {
+            if (mLisPriorityId[i] == priorityId) {
+                index = i
+            }
+        }
+        return index
     }
 
     private fun listeners() {

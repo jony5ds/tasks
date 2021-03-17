@@ -21,21 +21,35 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     private val mResponseCreate = MutableLiveData<ValidationResponse>()
     val getResponseOfCreate = mResponseCreate
 
-
+    private val mTask = MutableLiveData<TaskModel>()
+    val task = mTask
 
     fun listPriorities() {
-       mList.value = mPriorityList.getLocalList()
+        mList.value = mPriorityList.getLocalList()
     }
 
     fun saveTask(task: TaskModel) {
-        mTaskRepository.createTask(task,object : RequestListener<Boolean> {
+        mTaskRepository.createTask(task, object : RequestListener<Boolean> {
             override fun onSuccess(model: Boolean) {
                 mResponseCreate.value = ValidationResponse()
             }
 
             override fun onFailure(message: String) {
-                mResponseCreate.value = ValidationResponse(message = message,validator = false)
+                mResponseCreate.value = ValidationResponse(message = message, validator = false)
             }
+        })
+    }
+
+    fun loadTask(id: Int) {
+        mTaskRepository.loadTask(id, object : RequestListener<TaskModel> {
+            override fun onSuccess(model: TaskModel) {
+                mTask.value = model
+            }
+
+            override fun onFailure(message: String) {
+
+            }
+
         })
     }
 
