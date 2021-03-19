@@ -44,6 +44,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         if (bundle != null) {
             mTaskId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             mViewModel.loadTask(mTaskId)
+            button_save.setText(getString(R.string.update_task))
         }
     }
 
@@ -86,11 +87,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
             spinner_priority.adapter = adapter
         })
-        mViewModel.getResponseOfCreate.observe(this, androidx.lifecycle.Observer {
-            if (it.validator.not()) {
+        mViewModel.validation.observe(this, androidx.lifecycle.Observer {
+            if (it.validator.not())
                 Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Tarefa criada com sucesso", Toast.LENGTH_SHORT).show()
+            else {
+                val sucessMessage = if (mTaskId == 0) R.string.task_created else R.string.task_updated
+                Toast.makeText(this, sucessMessage , Toast.LENGTH_SHORT).show()
+                finish()
             }
         })
         mViewModel.task.observe(this, androidx.lifecycle.Observer {

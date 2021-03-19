@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         // Inicializa eventos
-        setListeners();
+        setListeners()
         observe()
 
         // Verifica se usuário está logado
@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mViewModel.login.observe(this, Observer {
             if (it.validator) {
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
             }
@@ -66,6 +67,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         mViewModel.loggedUser.observe(this, Observer {
             if (it) {
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
         })
     }

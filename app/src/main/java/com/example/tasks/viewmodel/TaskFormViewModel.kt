@@ -18,8 +18,8 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     private val mList = MutableLiveData<List<PriorityModel>>()
     val getList = mList
 
-    private val mResponseCreate = MutableLiveData<ValidationResponse>()
-    val getResponseOfCreate = mResponseCreate
+    private val mValidation = MutableLiveData<ValidationResponse>()
+    val validation = mValidation
 
     private val mTask = MutableLiveData<TaskModel>()
     val task = mTask
@@ -32,11 +32,11 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
         if (task.id == 0) {
             mTaskRepository.createTask(task, object : RequestListener<Boolean> {
                 override fun onSuccess(model: Boolean) {
-                    mResponseCreate.value = ValidationResponse()
+                    mValidation.value = ValidationResponse()
                 }
 
                 override fun onFailure(message: String) {
-                    mResponseCreate.value = ValidationResponse(message = message, validator = false)
+                    mValidation.value = ValidationResponse(message = message, validator = false)
                 }
             })
             return
@@ -44,11 +44,11 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
 
         mTaskRepository.updateTask(task, object : RequestListener<Boolean> {
             override fun onSuccess(model: Boolean) {
-                mResponseCreate.value = ValidationResponse()
+                mValidation.value = ValidationResponse()
             }
 
             override fun onFailure(message: String) {
-                mResponseCreate.value = ValidationResponse(message = message,validator = false)
+                mValidation.value = ValidationResponse(message = message,validator = false)
             }
 
         })
@@ -66,4 +66,6 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
 
         })
     }
+
+
 }

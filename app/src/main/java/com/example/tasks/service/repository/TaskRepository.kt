@@ -65,8 +65,6 @@ class TaskRepository(val context: Context) {
             }
 
         })
-
-
     }
 
     fun getAllTasks(listener: RequestListener<List<TaskModel>>) {

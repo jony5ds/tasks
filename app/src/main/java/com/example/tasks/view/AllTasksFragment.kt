@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,8 +30,14 @@ class AllTasksFragment : Fragment() {
         val recycler = root.findViewById<RecyclerView>(R.id.recycler_all_tasks)
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = mAdapter
-
         // Eventos disparados ao clicar nas linhas da RecyclerView
+        listener()
+        // Cria os observadores
+        observe()
+        return root
+    }
+
+    private fun listener() {
         mListener = object : TaskListener {
             override fun onListClick(id: Int) {
                 val intent = Intent(context, TaskFormActivity::class.java)
@@ -52,12 +59,6 @@ class AllTasksFragment : Fragment() {
                 mViewModel.undoTask(id)
             }
         }
-
-        // Cria os observadores
-        observe()
-
-        // Retorna view
-        return root
     }
 
     override fun onResume() {
@@ -70,6 +71,13 @@ class AllTasksFragment : Fragment() {
         mViewModel.tasks.observe(viewLifecycleOwner, Observer {
             if (it.count() > 0)
                 mAdapter.updateList(it)
+        })
+
+        mViewModel.validation.observe(viewLifecycleOwner, Observer {
+            if (it.validator)
+                Toast.makeText(context, getString(R.string.task_removed), Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
         })
     }
 
