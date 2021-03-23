@@ -60,12 +60,8 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
                 mTask.value = model
             }
 
-            override fun onFailure(message: String) {
-
-            }
+            override fun onFailure(message: String) {}
 
         })
     }
-
-
 }

@@ -10,16 +10,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PriorityRepository(context: Context) {
+class PriorityRepository(val context: Context) : BaseRepository(context) {
     private val mRemote = RetrofitClient.createService(PriorityService::class.java)
     private val mDataBase = TaskDatabase.getDatabase(context).priorityDAO()
 
     fun getPriority() {
+
+        if (!isConnectionAvailable(context)) {
+            return
+        }
         val call = mRemote.getList()
         call.enqueue(object : Callback<List<PriorityModel>> {
-            override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
-
-            }
+            override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) { }
 
             override fun onResponse(
                 call: Call<List<PriorityModel>>,
