@@ -22,10 +22,16 @@ class AllTasksFragment : Fragment() {
     private lateinit var mViewModel: AllTasksViewModel
     private lateinit var mListener: TaskListener
     private val mAdapter = TaskAdapter()
+    private var mTaskFilter = 0
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         mViewModel = ViewModelProvider(this).get(AllTasksViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_all_tasks, container, false)
+
+        //Filtro de tarefas
+        mTaskFilter = arguments?.getInt(TaskConstants.BUNDLE.TASKFILTER,0)!!
+
 
         val recycler = root.findViewById<RecyclerView>(R.id.recycler_all_tasks)
         recycler.layoutManager = LinearLayoutManager(context)
@@ -64,7 +70,7 @@ class AllTasksFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mAdapter.attachListener(mListener)
-        mViewModel.listAllTasks()
+        mViewModel.list(mTaskFilter)
     }
 
     private fun observe() {
@@ -80,5 +86,4 @@ class AllTasksFragment : Fragment() {
                 Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
         })
     }
-
 }

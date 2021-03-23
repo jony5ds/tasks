@@ -82,7 +82,7 @@ class TaskRepository(val context: Context) : BaseRepository(context) {
     }
 
     fun getNextSevenDays(listener: RequestListener<List<TaskModel>>) {
-        val call = mRemote.getNextSevenDays()
+         val call = mRemote.getNextSevenDays()
         getList(call, listener)
     }
 

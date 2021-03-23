@@ -41,7 +41,6 @@ open class BaseRepository(context: Context) {
                         ConnectivityManager.TYPE_ETHERNET -> true
                         else -> false
                     }
-
                 }
             }
         }

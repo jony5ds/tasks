@@ -44,7 +44,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         if (bundle != null) {
             mTaskId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             mViewModel.loadTask(mTaskId)
-            button_save.setText(getString(R.string.update_task))
+            button_save.text = getString(R.string.update_task)
         }
     }
 
@@ -60,11 +60,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun handleSave() {
         val task = TaskModel().apply {
+            this.id = mTaskId
             this.description = edit_description.text.toString()
-            this.priorityId = mLisPriorityId[spinner_priority.selectedItemPosition]
             this.complete = check_complete.isChecked
             this.dueDate = button_date.text.toString()
-            this.id = mTaskId
+            this.priorityId = mLisPriorityId[spinner_priority.selectedItemPosition]
         }
         mViewModel.saveTask(task)
     }

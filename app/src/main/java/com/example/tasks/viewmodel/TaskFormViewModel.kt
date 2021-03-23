@@ -29,6 +29,7 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun saveTask(task: TaskModel) {
+
         if (task.id == 0) {
             mTaskRepository.createTask(task, object : RequestListener<Boolean> {
                 override fun onSuccess(model: Boolean) {
@@ -39,19 +40,19 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
                     mValidation.value = ValidationResponse(message = message, validator = false)
                 }
             })
-            return
+
+        } else {
+            mTaskRepository.updateTask(task, object : RequestListener<Boolean> {
+                override fun onSuccess(model: Boolean) {
+                    mValidation.value = ValidationResponse()
+                }
+
+                override fun onFailure(message: String) {
+                    mValidation.value = ValidationResponse(message = message, validator = false)
+                }
+
+            })
         }
-
-        mTaskRepository.updateTask(task, object : RequestListener<Boolean> {
-            override fun onSuccess(model: Boolean) {
-                mValidation.value = ValidationResponse()
-            }
-
-            override fun onFailure(message: String) {
-                mValidation.value = ValidationResponse(message = message,validator = false)
-            }
-
-        })
     }
 
     fun loadTask(id: Int) {
