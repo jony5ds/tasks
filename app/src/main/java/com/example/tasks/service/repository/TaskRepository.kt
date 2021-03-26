@@ -180,7 +180,6 @@ class TaskRepository(val context: Context) : BaseRepository(context) {
                     listener.onSuccess(it)
                 }
             }
-
         })
     }
 }
